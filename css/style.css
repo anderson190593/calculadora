@@ -1,0 +1,18 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.card {
+    border-radius: 1rem;
+    max-width: 400px;
+}
+
+#display {
+    background-color: #212529;
+    color: #fff;
+    border: none;
+    cursor: default;
+}
