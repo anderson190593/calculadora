@@ -1,9 +1,8 @@
-/* css/style.css */
 :root {
     --bg-color: #050505;
     --calc-bg: #1a1a2e;
-    --neon-primary: #00ff88; /* Verde Hacker */
-    --neon-secondary: #00d4ff; /* Azul CIano */
+    --neon-primary: #00ff88;
+    --neon-secondary: #00d4ff;
     --neon-text: #fff;
     --btn-bg: #252540;
     --btn-hover: #303050;
@@ -19,11 +18,13 @@
 body {
     background-color: var(--bg-color);
     font-family: 'Rajdhani', sans-serif;
-    min-height: 100vh;
+    height: 100vh; /* Altura exata da viewport */
+    width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* Grade futurista de fundo */
+    overflow: hidden; /* Garante que o body nunca role */
+    
     background-image: 
         linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
@@ -32,13 +33,25 @@ body {
 
 .calculator-body {
     background: var(--calc-bg);
-    padding: 2rem;
+    padding: 1.5rem; /* Padding um pouco menor */
     border-radius: 20px;
     box-shadow: 
         0 0 20px rgba(0,0,0,0.5),
-        0 0 0 1px rgba(255,255,255,0.05); /* Borda sutil */
-    width: 100%;
+        0 0 0 1px rgba(255,255,255,0.05);
+    
+    width: 400px;          /* Largura fixa */
     max-width: 400px;
+    
+    /* --- LÓGICA DE TAMANHO --- */
+    height: 90vh;           /* Ocupa 90% da altura da tela */
+    max-height: 800px;      /* Mas não fica gigante em monitores 4k */
+    min-height: 500px;      /* Tamanho mínimo para não quebrar */
+    
+    display: flex;          /* Transforma em container flexível */
+    flex-direction: column; /* Organiza itens em coluna */
+    justify-content: space-between; /* Distribui o espaço */
+    /* ------------------------- */
+
     position: relative;
     backdrop-filter: blur(10px);
 }
@@ -59,9 +72,10 @@ body {
     color: white;
     font-family: 'Orbitron', sans-serif;
     letter-spacing: 2px;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem; /* Margem reduzida */
     font-size: 0.9rem;
     opacity: 0.8;
+    flex-shrink: 0; /* Impede que o logo encolha demais */
 }
 
 .brand-accent {
@@ -72,27 +86,32 @@ body {
 .display-container {
     background: var(--display-bg);
     border-radius: 10px;
-    padding: 1.5rem;
+    padding: 1rem;
     text-align: right;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
     border: 1px solid rgba(255,255,255,0.05);
+    flex-shrink: 0; /* O visor mantém seu tamanho ideal */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .previous-operand {
     color: rgba(255,255,255,0.5);
-    font-size: 1rem;
-    min-height: 1.5rem;
-    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    min-height: 1.2rem;
+    margin-bottom: 0.2rem;
 }
 
 .current-operand {
     color: var(--neon-text);
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     font-family: 'Orbitron', sans-serif;
     font-weight: bold;
     word-wrap: break-word;
     word-break: break-all;
+    line-height: 1.1;
     text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
 }
 
@@ -100,14 +119,28 @@ body {
 .keypad {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    /* Cria 5 linhas iguais que ocupam TODO o espaço restante */
+    grid-template-rows: repeat(5, 1fr); 
+    gap: 10px;
+    
+    flex-grow: 1; /* O segredo: ocupa todo o espaço vertical livre */
+    min-height: 0; /* Permite encolher abaixo do conteúdo se necessário */
 }
 
 .btn {
     background: var(--btn-bg);
     border: none;
-    padding: 20px;
-    font-size: 1.25rem;
+    /* Remove padding fixo para permitir redimensionamento */
+    padding: 0; 
+    height: 100%; /* Ocupa 100% da célula do grid */
+    width: 100%;
+    
+    /* Centraliza o texto/ícone */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    font-size: 1.2rem;
     color: white;
     border-radius: 12px;
     cursor: pointer;
@@ -118,7 +151,7 @@ body {
 }
 
 .btn:active {
-    transform: translateY(4px);
+    transform: translateY(2px);
     box-shadow: none;
 }
 
@@ -130,7 +163,7 @@ body {
 .btn-operator {
     color: var(--neon-secondary);
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
 }
 
 .btn-function {
@@ -147,4 +180,22 @@ body {
 
 .span-two {
     grid-column: span 2;
+}
+
+/* Ajuste para telas muito pequenas (mobile na horizontal) */
+@media (max-height: 600px) {
+    .calculator-body {
+        padding: 1rem;
+        border-radius: 10px;
+    }
+    .current-operand {
+        font-size: 1.8rem;
+    }
+    .btn {
+        font-size: 1rem;
+        border-radius: 8px;
+    }
+    .keypad {
+        gap: 6px;
+    }
 }
